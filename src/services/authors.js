@@ -11,5 +11,8 @@ export default {
   },
   update (id, params) {
     return axios.put(AUTHORS_URL + `/${id}`, params)
+  },
+  getAuthorInterest (authorId) {
+    return axios.get(AUTHORS_URL + `/${parseInt(authorId)}/interest`)
   }
 }

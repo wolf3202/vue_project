@@ -1,2 +1,3 @@
 export const SET_ARTICLES = 'SET_ARTICLES';
-export const SET_AUTHORS = 'SET_AUTHORS'
+export const SET_AUTHORS = 'SET_AUTHORS';
+export const SET_AUTHOR_INTEREST = 'SET_AUTHOR_INTEREST'

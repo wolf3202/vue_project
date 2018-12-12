@@ -20,7 +20,7 @@
               <v-list-tile
                 v-for="author in authors"
                 :key="author.name"
-                @click="currentAuthor = author"
+                @click="setCurrentAuthor(author)"
               >
                 <v-list-tile-content>
                   <v-list-tile-title>{{ author.name }}</v-list-tile-title>
@@ -37,13 +37,10 @@
                 src="../assets/icon.jpg"
               >
             </v-avatar>
-            <div class="headline">{{ currentAuthor.name }}</div>
+            <div class="headline">{{ currentAuthor.name }}  {{ currentAuthor.id }}</div>
             <div class="subheading text-xs-center grey--text pt-1 pb-3">({{ currentAuthor.age }}), {{ currentAuthor.sex }}</div>
-            <v-layout justify-space-between>
-              <a href="javascript:;" class="body-2">Home</a>
-              <a href="javascript:;" class="body-2">About</a>
-              <a href="javascript:;" class="body-2">Github</a>
-              <a href="javascript:;" class="body-2">Other</a>
+            <v-layout justify-space-between v-for="interest in authorInterest" :key="interest.name">
+              {{ interest.name }}
             </v-layout>
           </div>
         </v-flex>
@@ -139,22 +136,27 @@ export default {
   computed: {
     ...mapGetters({
       articles: 'getAllArticles',
-      authors: 'getAllAuthors'
+      authors: 'getAllAuthors',
+      authorInterest: 'getCurrentAuthorInterests',
     })
   },
   created() {
-    this.$store.dispatch('fetchArticles');
+    this.$store.dispatch('fetchArticles')
     this.$store.dispatch('fetchAuthors')
-  },
+    },
   methods: {
     saveAuthor() {
       this.$store.dispatch('createAuthor', this.form)
         .then(() => {
-          this.dialog = false;
-          this.form.name = '';
-          this.form.age = '';
+          this.dialog = false
+          this.form.name = ''
+          this.form.age = ''
           this.form.sex = ''
         })
+    },
+     setCurrentAuthor (author) {
+      this.currentAuthor = author
+      this.$store.dispatch('fetchAuthorInterest', author.id)
     }
   }
 }
