@@ -11,5 +11,8 @@ export default {
   },
   update (id, params) {
     return axios.put(ARTICLES_URL + `/${id}`, params)
+  },
+  destroy (id) {
+    return axios.delete(ARTICLES_URL + `/${id}`)
   }
 }

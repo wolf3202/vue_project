@@ -12,9 +12,10 @@ const getters = {
 const actions = {
   fetchAuthors ({ commit }) {
     AuthorsAPI.all()
-      .then(({ data }) => {
+      .then( data  => {
         commit(types.SET_AUTHORS, data)
       })
+      // eslint-disable-next-line
       .catch(error => console.warn('fetchAuthors', error))
   },
   createAuthor ({ dispatch }, form) {
@@ -25,6 +26,7 @@ const actions = {
           resolve()
         })
         .catch(error => {
+          // eslint-disable-next-line
           console.warn('Error createAuthor.', error);
           reject()
         })

@@ -50,8 +50,12 @@
                   <v-icon medium>fa-facebook</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
+                <v-btn class="blue--text text--darken-4" @click="openEditForm(article.id)">Edit</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn class="red--text" @click="openDeleteForm(article.id)">Delete</v-btn>
+                <v-spacer></v-spacer>
                 <div v-for="author in authors" :key="author.name">
-                  <div v-if="author.id == article.author_id">
+                  <div v-if="author.id == article.authorId">
                     <v-btn flat class="blue--text">{{ author.name }}</v-btn>
                   </div>
                 </div>
@@ -61,84 +65,37 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-btn fab dark color="indigo" absolute bottom right @click="dialog = true">
-      <v-icon dark>add</v-icon>
-    </v-btn>
-    <v-dialog
-      v-model="dialog"
-      max-width="290"
+    <v-btn
+      absolute
+      dark
+      fab
+      bootom
+      right
+      color="pink"
+      @click="openEditForm()"
     >
-      <v-card>
-        <v-card-title class="headline">New article</v-card-title>
-
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-text-field label="Title" required
-                              v-model="form.title"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                <v-textarea
-                  v-model="form.body"
-                  color="teal"
-                >
-                  <div slot="label">Content:</div>
-                </v-textarea>
-              </v-flex>
-              <v-flex xs12>
-                <v-select
-                  v-model="form.author_id"
-                  :items="authors"
-                  item-text="name"
-                  item-value="id"
-                  label="Select author"
-                ></v-select>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="dialog = false"
-          >
-            Отменить
-          </v-btn>
-
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="saveArticle"
-          >
-            Сохранить
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+      <v-icon>add</v-icon>
+    </v-btn>
+    <editArticleForm/>
+    <delete-article-form/>
   </v-content>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapState, mapGetters, mapActions} from 'vuex'
+import editArticleForm from '@/views/articles/EditArticleForm'
+import deleteArticleForm from '@/views/articles/DeleteArticleForm'
 
 export default {
-  data() {
-    return {
-      dialog: false,
-      form: {
-        title: '',
-        body: '',
-        author_id: ''
-      }
-    }
+  name: 'Articles',
+  components: {
+    editArticleForm: editArticleForm,
+    deleteArticleForm: deleteArticleForm
   },
   computed: {
+    ...mapState({
+      articlesList: state => state.articles.list
+    }),
     ...mapGetters({
       articles: 'getAllArticles',
       authors: 'getAllAuthors'
@@ -149,15 +106,11 @@ export default {
     this.$store.dispatch('fetchAuthors')
   },
   methods: {
-    saveArticle() {
-      this.$store.dispatch('createArticle', this.form)
-        .then(() => {
-          this.dialog = false;
-          this.form.title = '';
-          this.form.body = '';
-          this.form.author_id = ''
-        })
-    }
+    ...mapActions({
+      openEditForm: 'openEditArticleForm',
+      closeEditForm: 'closeEditArticleForm',
+      openDeleteForm: 'openDeleteArticleForm'
+    })
   }
 }
 </script>

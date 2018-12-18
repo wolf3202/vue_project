@@ -12,9 +12,10 @@ const getters = {
 const actions = {
   fetchAuthorInterest ({ commit }, authorId) {
     AuthorsAPI.getAuthorInterest(authorId)
-      .then(({ data }) => {
+      .then( data  => {
         commit(types.SET_AUTHOR_INTEREST, data)
       })
+      // eslint-disable-next-line
       .catch(error => console.warn('fetchAuthorInterest', error))
   }
 }

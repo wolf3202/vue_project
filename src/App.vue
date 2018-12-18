@@ -5,8 +5,9 @@
       <v-layout row wrap align-center>
         <v-flex xs12>
           <div class="white--text ml-3">
-            <router-link to="/">Home  </router-link>
-            <router-link to="/profile">Profile</router-link>
+            <router-link to="/">Home     </router-link>
+            <router-link to="/profile">Profile      </router-link>
+            <router-link to="/ShowInterests">ShowInterests</router-link>
           </div>
         </v-flex>
       </v-layout>

@@ -37,8 +37,10 @@
                 src="../assets/icon.jpg"
               >
             </v-avatar>
-            <div class="headline">{{ currentAuthor.name }}  {{ currentAuthor.id }}</div>
-            <div class="subheading text-xs-center grey--text pt-1 pb-3">({{ currentAuthor.age }}), {{ currentAuthor.sex }}</div>
+            <div class="headline">{{ currentAuthor.name }} {{ currentAuthor.id }}</div>
+            <div class="subheading text-xs-center grey--text pt-1 pb-3">({{ currentAuthor.age }}), {{ currentAuthor.sex
+              }}
+            </div>
             <v-layout justify-space-between v-for="interest in authorInterest" :key="interest.name">
               {{ interest.name }}
             </v-layout>
@@ -65,16 +67,16 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12>
-                  <v-slider
-                    v-model="form.age"
-                    :rules="rules.age"
-                    color="orange"
-                    label="Age"
-                    hint="Be honest"
-                    min="1"
-                    max="100"
-                    thumb-label
-                  ></v-slider>
+                <v-slider
+                  v-model="form.age"
+                  :rules="rules.age"
+                  color="orange"
+                  label="Age"
+                  hint="Be honest"
+                  min="1"
+                  max="100"
+                  thumb-label
+                ></v-slider>
               </v-flex>
               <v-flex xs12>
                 <v-select
@@ -129,7 +131,9 @@ export default {
         age: [
           val => val > 10 || `I don't believe you!`
         ],
-        name: [val => (val || '').length > 0 || 'This field is required']
+        name: [
+          val => (val || '').length > 0 || 'This field is required'
+        ]
       },
     }
   },
@@ -143,7 +147,7 @@ export default {
   created() {
     this.$store.dispatch('fetchArticles')
     this.$store.dispatch('fetchAuthors')
-    },
+  },
   methods: {
     saveAuthor() {
       this.$store.dispatch('createAuthor', this.form)
@@ -154,7 +158,7 @@ export default {
           this.form.sex = ''
         })
     },
-     setCurrentAuthor (author) {
+    setCurrentAuthor(author) {
       this.currentAuthor = author
       this.$store.dispatch('fetchAuthorInterest', author.id)
     }
