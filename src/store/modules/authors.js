@@ -1,34 +1,28 @@
 import * as types from '../mutation-types'
 import AuthorsAPI from '@/services/authors'
+import _ from 'lodash'
 
 const state = {
   list: []
 }
 
 const getters = {
-  getAllAuthors: state => state.list
+  getAllAuthors: state => state.list,
+  getAuthorById: state => id => _.cloneDeep(state.list.find(author => author.id === parseInt(id)))
 }
 
 const actions = {
-  fetchAuthors ({ commit }) {
-    AuthorsAPI.all()
-      .then( data  => {
-        commit(types.SET_AUTHORS, data)
-      })
-      // eslint-disable-next-line
-      .catch(error => console.warn('fetchAuthors', error))
-  },
-  createAuthor ({ dispatch }, form) {
+  fetchAuthors({commit}) {
     return new Promise((resolve, reject) => {
-      AuthorsAPI.store(form)
-        .then(() => {
-          dispatch('fetchAuthors');
+      AuthorsAPI.all()
+        .then(data => {
+          commit(types.SET_AUTHORS, data)
           resolve()
         })
         .catch(error => {
           // eslint-disable-next-line
-          console.warn('Error createAuthor.', error);
-          reject()
+          console.warn('fetchAuthors', error)
+          reject(error)
         })
     })
   }

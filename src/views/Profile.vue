@@ -13,9 +13,7 @@
                 </v-list-tile>
               </v-list>
             </v-toolbar>
-
             <v-divider></v-divider>
-
             <v-list dense class="pt-0">
               <v-list-tile
                 v-for="author in authors"
@@ -30,137 +28,77 @@
           </v-navigation-drawer>
         </v-flex>
         <v-flex xs12 md4>
-          <div class="text-xs-center" v-if="currentAuthor != false">
+          <div class="text-xs-center" v-if="currentAuthor !== false">
             <v-avatar size="125px">
               <img
                 class="img-circle elevation-7 mb-1"
                 src="../assets/icon.jpg"
               >
             </v-avatar>
-            <div class="headline">{{ currentAuthor.name }} {{ currentAuthor.id }}</div>
-            <div class="subheading text-xs-center grey--text pt-1 pb-3">({{ currentAuthor.age }}), {{ currentAuthor.sex
-              }}
+            <div class="headline">{{ currentAuthor.name }}</div>
+            <v-btn flat small color="primary" @click="openEditForm(currentAuthor.id)">Edit</v-btn>
+            <v-btn flat small color="error" @click="openDeleteForm(currentAuthor.id)">Delete</v-btn>
+            <div class="subheading text-xs-center grey--text pt-1 pb-3">({{ currentAuthor.age }}), {{ currentAuthor.sex }}
             </div>
-            <v-layout justify-space-between v-for="interest in authorInterest" :key="interest.name">
-              {{ interest.name }}
+            <v-layout justify-space-between v-for="interestId in currentAuthor.interestIds" :key="interestId">
+              {{ interest(interestId).name }}
             </v-layout>
           </div>
         </v-flex>
       </v-layout>
     </v-container>
-    <v-btn fab dark color="indigo" absolute bottom right @click="dialog = true">
+    <v-btn fab dark color="indigo" absolute bottom right @click="openEditForm()">
       <v-icon dark>add</v-icon>
     </v-btn>
-    <v-dialog
-      v-model="dialog"
-      max-width="290"
-    >
-      <v-card>
-        <v-card-title class="headline">New article</v-card-title>
-
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-text-field label="Name" required
-                              v-model="form.name"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                <v-slider
-                  v-model="form.age"
-                  :rules="rules.age"
-                  color="orange"
-                  label="Age"
-                  hint="Be honest"
-                  min="1"
-                  max="100"
-                  thumb-label
-                ></v-slider>
-              </v-flex>
-              <v-flex xs12>
-                <v-select
-                  v-model="form.sex"
-                  :items="items"
-                  label="Sex"
-                ></v-select>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="dialog = false"
-          >
-            Отменить
-          </v-btn>
-
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="saveAuthor"
-          >
-            Сохранить
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <EditAuthorForm/>
+    <DeleteAuthorForm/>
   </v-content>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import EditAuthorForm from '@/views/authors/EditAuthorForm'
+import DeleteAuthorForm from '@/views/authors/DeleteAuthorForm'
+import * as types from '@/store/mutation-types'
 
 export default {
+  components: {
+    EditAuthorForm: EditAuthorForm,
+    DeleteAuthorForm: DeleteAuthorForm
+  },
   data() {
     return {
-      currentAuthor: [],
-      dialog: false,
-      items: ['male', 'female'],
-      form: {
-        name: '',
-        age: '',
-        sex: ''
-      },
-      rules: {
-        age: [
-          val => val > 10 || `I don't believe you!`
-        ],
-        name: [
-          val => (val || '').length > 0 || 'This field is required'
-        ]
-      },
+      isLoaded: false,
+      items: ['male', 'female']
     }
   },
   computed: {
     ...mapGetters({
       articles: 'getAllArticles',
       authors: 'getAllAuthors',
-      authorInterest: 'getCurrentAuthorInterests',
+      interest: 'getInterestById',
+      currentAuthor: 'getThisState'
     })
   },
   created() {
-    this.$store.dispatch('fetchArticles')
-    this.$store.dispatch('fetchAuthors')
+    Promise
+      .all([
+        this.$store.dispatch('fetchArticles'),
+        this.$store.dispatch('fetchAuthors'),
+        this.$store.dispatch('fetchInterests')
+      ])
+      .then(() => {
+        this.isLoaded = true
+      })
   },
   methods: {
-    saveAuthor() {
-      this.$store.dispatch('createAuthor', this.form)
-        .then(() => {
-          this.dialog = false
-          this.form.name = ''
-          this.form.age = ''
-          this.form.sex = ''
-        })
-    },
-    setCurrentAuthor(author) {
-      this.currentAuthor = author
-      this.$store.dispatch('fetchAuthorInterest', author.id)
+    ...mapActions({
+      openEditForm: 'openEditAuthorForm',
+      closeEditForm: 'closeEditAuthorForm',
+      openDeleteForm: 'openDeleteAuthorForm'
+    }),
+    setCurrentAuthor (author) {
+      this.$store.commit(types.SET_EDIT_AUTHOR, author)
     }
   }
 }
