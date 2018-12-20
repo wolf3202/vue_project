@@ -86,11 +86,6 @@ export default {
   data() {
     return {
       valid: true,
-      form: {
-        title: '',
-        body: '',
-        authorId: ''
-      },
       rules: {
         title: [
           v => !!v || 'Title is required'

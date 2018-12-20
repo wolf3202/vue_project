@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home'
 import Profile from '@/views/Profile'
-import ShowInterests from '@/views/interests/ShowInterests'
+import Interest from '@/views/Interest'
 
 Vue.use(Router)
 
@@ -20,9 +20,9 @@ export default new Router({
       component: Profile
     },
     {
-      path: '/ShowInterests',
-      name: 'ShowInterests',
-      component: ShowInterests
+      path: '/Interest',
+      name: 'Interest',
+      component: Interest
     },
     {
       path: '*',

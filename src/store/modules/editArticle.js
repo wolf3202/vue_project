@@ -66,13 +66,13 @@ const actions = {
         commit(types.SET_EDIT_ARTICLE_ERROR_TEXT, error.message)
       })
   },
-  deleteArticle ({ state, commit }){
+  deleteArticle ({ state, commit, dispatch }){
     const articleId = state.main.id
     if (articleId) {
       commit(types.START_EDIT_ARTICLE_LOADING)
       return ArticlesAPI.destroy(articleId)
         .then(() => {
-          commit(types.DELETE_ARTICLE)
+          dispatch('fetchArticles')
           commit(types.CLEAR_EDIT_ARTICLE)
         })
         .catch( error => {
@@ -91,13 +91,13 @@ const mutations = {
     state.main.authorId = article.authorId
   },
   [types.UPDATE_EDIT_ARTICLE_TITLE] (state, value) {
-    state.main.title = value;
+    state.main.title = value
   },
   [types.UPDATE_EDIT_ARTICLE_BODY] (state, value) {
-    state.main.body = value;
+    state.main.body = value
   },
   [types.UPDATE_EDIT_ARTICLE_AUTHOR_ID] (state, value) {
-    state.main.authorId = value;
+    state.main.authorId = value
   },
   [types.START_EDIT_ARTICLE_LOADING] (state) {
     state.loading = true

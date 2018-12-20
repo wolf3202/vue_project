@@ -7,7 +7,7 @@
           <div class="white--text ml-3">
             <router-link to="/">Home     </router-link>
             <router-link to="/profile">Profile      </router-link>
-            <router-link to="/ShowInterests">ShowInterests</router-link>
+            <router-link to="/Interest">Interest</router-link>
           </div>
         </v-flex>
       </v-layout>

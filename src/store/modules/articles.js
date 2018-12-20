@@ -13,24 +13,16 @@ const getters = {
 
 const actions = {
   fetchArticles ({ commit }) {
-    ArticlesAPI.all()
-      .then( data => {
-        commit(types.SET_ARTICLES, data)
-      })
-      // eslint-disable-next-line
-      .catch(error => console.warn('Error fetchArticles.', error))
-  },
-  createArticle ({ dispatch }, form) {
     return new Promise((resolve, reject) => {
-      ArticlesAPI.store(form)
-        .then(() => {
-          dispatch('fetchArticles');
+      ArticlesAPI.all()
+        .then( data => {
+          commit(types.SET_ARTICLES, data)
           resolve()
         })
         .catch(error => {
           // eslint-disable-next-line
-          console.warn('Error createArticles.', error);
-          reject()
+          console.warn('Error fetchArticles.', error)
+          reject(error)
         })
     })
   }

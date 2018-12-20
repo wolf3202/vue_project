@@ -4,7 +4,7 @@
       <v-card-title class="headline">Please confirm</v-card-title>
 
       <v-card-text>
-        Are you sure you want to delete the article?
+        Are you sure you want to delete this article?
         <div class="mt-3 text-xs-right caption red--text" v-show="errorText.length > 0" v-text="errorText"></div>
       </v-card-text>
 

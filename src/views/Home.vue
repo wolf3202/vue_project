@@ -65,16 +65,8 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-btn
-      absolute
-      dark
-      fab
-      bootom
-      right
-      color="pink"
-      @click="openEditForm()"
-    >
-      <v-icon>add</v-icon>
+    <v-btn fab dark color="pink" absolute bottom right @click="openEditForm()">
+      <v-icon dark>add</v-icon>
     </v-btn>
     <editArticleForm/>
     <delete-article-form/>
@@ -82,7 +74,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions} from 'vuex'
+import { mapGetters, mapActions} from 'vuex'
 import editArticleForm from '@/views/articles/EditArticleForm'
 import deleteArticleForm from '@/views/articles/DeleteArticleForm'
 
@@ -93,16 +85,13 @@ export default {
     deleteArticleForm: deleteArticleForm
   },
   computed: {
-    ...mapState({
-      articlesList: state => state.articles.list
-    }),
     ...mapGetters({
       articles: 'getAllArticles',
       authors: 'getAllAuthors'
     })
   },
   created() {
-    this.$store.dispatch('fetchArticles');
+    this.$store.dispatch('fetchArticles')
     this.$store.dispatch('fetchAuthors')
   },
   methods: {
