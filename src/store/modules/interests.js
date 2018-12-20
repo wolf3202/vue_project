@@ -1,22 +1,30 @@
 import * as types from '../mutation-types'
 import InterestsAPI from '@/services/interests'
+import _ from 'lodash'
 
 const state = {
   list: []
 }
 
 const getters = {
-  getAllInterests: state => state.list
+  getAllInterests: state => state.list,
+  getInterestById: state => id => _.cloneDeep(state.list.find(interest => interest.id === parseInt(id)))
 }
 
 const actions = {
   fetchInterests ({ commit }) {
-    InterestsAPI.all()
-      .then( data  => {
-        commit(types.SET_INTERESTS, data)
-      })
-      // eslint-disable-next-line
-      .catch(error => console.warn('fetchInterests', error))
+    return new Promise((resolve, reject) => {
+      InterestsAPI.all()
+        .then( data  => {
+          commit(types.SET_INTERESTS, data)
+          resolve()
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+          console.warn('fetchInterests', error)
+          reject(error)
+        })
+    })
   },
   createInterest ({ dispatch }, form) {
     return new Promise((resolve, reject) => {
@@ -28,7 +36,7 @@ const actions = {
         .catch(error => {
           // eslint-disable-next-line
           console.warn('Error createInterest.', error);
-          reject()
+          reject(error)
         })
     })
   }
