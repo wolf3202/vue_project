@@ -7,7 +7,7 @@
             <v-avatar size="125px">
               <img
                 class="img-circle elevation-7 mb-1"
-                src="https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/lists/1.jpg"
+                src="../assets/icon.jpg"
               >
             </v-avatar>
             <div class="headline">John <span style="font-weight:bold">Carter</span></div>
@@ -26,7 +26,7 @@
               <v-card-media
                 class="white--text"
                 height="170px"
-                src="https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/cards/drop.jpg"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN_Ie2Dc5TTZboSkqwNGKMGEghWELTCn3bke2xiaVjuzeJAH0c"
               >
                 <v-container fill-height fluid>
                   <v-layout>
