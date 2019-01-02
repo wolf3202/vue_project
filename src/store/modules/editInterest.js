@@ -5,7 +5,6 @@ const state = {
   main: {
     id: '',
     name: '',
-    authorId: null
   },
   editForm: {
     visible: false
@@ -41,7 +40,7 @@ const actions = {
   closeDeleteInterestForm ({ commit }) {
     commit(types.CLEAR_EDIT_INTEREST)
   },
-  saveEditInterest ({ state, commit }, dispatch) {
+  saveEditInterest ({ state, commit, dispatch}) {
     const interest = state.main
     if (interest.id) {
       return InterestsAPI.update(interest.id, interest)
@@ -53,12 +52,21 @@ const actions = {
           commit(types.SET_EDIT_INTEREST_ERROR_TEXT, error.message)
         })
     }
+    return InterestsAPI.store(interest)
+      .then(() => {
+        dispatch('fetchInterests')
+        commit(types.CLEAR_EDIT_INTEREST)
+      })
+      .catch(error => {
+        commit(types.SET_EDIT_INTEREST_ERROR_TEXT, error.message)
+      })
   },
-  deleteInterest ({ state, commit }) {
+  deleteInterest ({ state, commit, dispatch }) {
     const interestId = state.main.id
     if (interestId) {
       return InterestsAPI.destroy(interestId)
         .then(() => {
+          dispatch('fetchInterests')
           commit(types.CLEAR_EDIT_INTEREST)
         })
         .catch(error => {
@@ -76,14 +84,11 @@ const mutations = {
   [types.UPDATE_EDIT_INTEREST_NAME] ( state, value) {
     state.main.name = value
   },
-  [types.UPDATE_EDIT_INTEREST_AUTHOR_ID] ( state, value ) {
-    state.main.authorId = value
-  },
   [types.SHOW_EDIT_INTEREST_FORM] (state) {
-    state.main.editForm.visible = true
+    state.editForm.visible = true
   },
   [types.SHOW_DELETE_INTEREST_FORM] (state) {
-    state.main.deleteForm.visible = true
+    state.deleteForm.visible = true
   },
   [types.SET_EDIT_INTEREST_ERROR_TEXT] ( state, text) {
     state.main.errorText = text
@@ -91,7 +96,6 @@ const mutations = {
   [types.CLEAR_EDIT_INTEREST] (state) {
     state.main.id = ''
     state.main.name = ''
-    state.main.authorId = null
     state.editForm.visible = false
     state.deleteForm.visible = false
     state.errorText = ''

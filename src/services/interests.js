@@ -12,6 +12,9 @@ export default {
   update (id, params) {
     return axios.put(INTERESTS_URL + `/${id}`, params)
   },
+  destroy (id) {
+    return axios.delete(INTERESTS_URL + `/${id}`)
+  },
   getInterestAuthor (interestId) {
     return axios.get(INTERESTS_URL + `/${parseInt(interestId)}/author`)
   }

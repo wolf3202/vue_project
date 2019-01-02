@@ -1,75 +1,75 @@
 <template>
-    <v-dialog
-      :value="visible"
-      @input="close()"
-    >
-      <v-card>
-        <v-card-title class="headline">New author</v-card-title>
-        <v-card-text>
-          <v-form ref="editAuthorForm" v-model="valid" lazy-validation autocomplete="off">
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12>
-                  <v-text-field label="Name" required
-                                v-model="authorName"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-slider
-                    v-model="age"
-                    :rules="rules.age"
-                    color="orange"
-                    label="Age"
-                    hint="Be honest"
-                    min="1"
-                    max="100"
-                    thumb-label
-                  ></v-slider>
-                </v-flex>
-                <v-flex xs12>
-                  <v-select
-                    v-model="sex"
-                    :items="items"
-                    label="Sex"
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <v-select
-                    v-model="interestList"
-                    :items="interests"
-                    item-text="name"
-                    item-value="id"
-                    attach
-                    chips
-                    label="Interests:"
-                    multiple
-                  ></v-select>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
+  <v-dialog
+    :value="visible"
+    @input="close()"
+  >
+    <v-card>
+      <v-card-title class="headline">New author</v-card-title>
+      <v-card-text>
+        <v-form ref="editAuthorForm" v-model="valid" lazy-validation autocomplete="off">
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-text-field label="Name" required
+                              v-model="authorName"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-slider
+                  v-model="age"
+                  :rules="rules.age"
+                  color="orange"
+                  label="Age"
+                  hint="Be honest"
+                  min="1"
+                  max="100"
+                  thumb-label
+                ></v-slider>
+              </v-flex>
+              <v-flex xs12>
+                <v-select
+                  v-model="sex"
+                  :items="items"
+                  label="Sex"
+                ></v-select>
+              </v-flex>
+              <v-flex xs12 sm6>
+                <v-select
+                  v-model="interestList"
+                  :items="interests"
+                  item-text="name"
+                  item-value="id"
+                  attach
+                  chips
+                  label="Interests:"
+                  multiple
+                ></v-select>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
 
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="close()"
-          >
-            Отменить
-          </v-btn>
+        <v-btn
+          color="green darken-1"
+          flat="flat"
+          @click="close()"
+        >
+          Отменить
+        </v-btn>
 
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="save()"
-          >
-            Сохранить
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+        <v-btn
+          color="green darken-1"
+          flat="flat"
+          @click="save()"
+        >
+          Сохранить
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -103,7 +103,7 @@ export default {
     ...mapState({
       visible: state => state.editAuthor.editForm.visible,
       isNew: state => !state.editAuthor.main.id,
-      errorText: state => state.errorText
+      errorText: state => state.editAuthor.errorText
     }),
     authorName: {
       get() {

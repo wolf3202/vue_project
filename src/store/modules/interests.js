@@ -25,20 +25,6 @@ const actions = {
           reject(error)
         })
     })
-  },
-  createInterest ({ dispatch }, form) {
-    return new Promise((resolve, reject) => {
-      InterestsAPI.store(form)
-        .then(() => {
-          dispatch('fetchInterests');
-          resolve()
-        })
-        .catch(error => {
-          // eslint-disable-next-line
-          console.warn('Error createInterest.', error);
-          reject(error)
-        })
-    })
   }
 }
 
