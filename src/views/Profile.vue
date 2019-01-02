@@ -28,7 +28,7 @@
           </v-navigation-drawer>
         </v-flex>
         <v-flex xs12 md4>
-          <div class="text-xs-center" v-if="currentAuthor !== false">
+          <div class="text-xs-center" v-if="currentAuthor.id != false">
             <v-avatar size="125px">
               <img
                 class="img-circle elevation-7 mb-1"
