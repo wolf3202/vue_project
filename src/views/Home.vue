@@ -2,7 +2,7 @@
   <v-content>
     <v-container>
       <v-layout row wrap align-center>
-        <v-flex xs12 md4>
+        <v-flex xs12 md4 align-self-baseline>
           <div class="text-xs-center">
             <v-avatar size="125px">
               <img
@@ -40,25 +40,18 @@
                 {{ article.body }}
               </v-card-text>
               <v-card-actions>
-                <v-btn icon class="red--text">
-                  <v-icon medium>fa-reddit</v-icon>
-                </v-btn>
-                <v-btn icon class="light-blue--text">
-                  <v-icon medium>fa-twitter</v-icon>
-                </v-btn>
-                <v-btn icon class="blue--text text--darken-4">
-                  <v-icon medium>fa-facebook</v-icon>
-                </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn class="blue--text text--darken-4" @click="openEditForm(article.id)">Edit</v-btn>
-                <v-spacer></v-spacer>
-                <v-btn class="red--text" @click="openDeleteForm(article.id)">Delete</v-btn>
-                <v-spacer></v-spacer>
                 <div v-for="author in authors" :key="author.name">
                   <div v-if="author.id == article.authorId">
                     <v-btn flat class="blue--text">{{ author.name }}</v-btn>
                   </div>
                 </div>
+                <v-spacer></v-spacer>
+                <v-btn icon ripple @click="openEditForm(article.id)">
+                  <v-icon color="grey lighten-1">edit</v-icon>
+                </v-btn>
+                <v-btn icon ripple @click="openDeleteForm(article.id)">
+                  <v-icon color="grey lighten-1">delete</v-icon>
+                </v-btn>
               </v-card-actions>
             </v-card>
           </div>

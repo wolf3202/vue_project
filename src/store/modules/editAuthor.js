@@ -1,5 +1,6 @@
 import * as types from '../mutation-types'
 import AuthorsAPI from '@/services/authors'
+import Uploader from '@/services/uploader'
 
 const state = {
   main: {
@@ -14,6 +15,12 @@ const state = {
   },
   deleteForm: {
     visible: false
+  },
+  avatar: {
+    name: null,
+    url: null,
+    file: null,
+    errors: []
   },
   errorText: ''
 }
@@ -45,6 +52,8 @@ const actions = {
   },
   saveEditAuthor ({ state, commit, dispatch }) {
     const author = state.main
+    author['avatar'] = state.avatar.name
+
     if (author.id) {
       return AuthorsAPI.update(author.id, author)
         .then(() => {
@@ -63,6 +72,20 @@ const actions = {
       .catch(error => {
         commit(types.SET_EDIT_AUTHOR_ERROR_TEXT, error.message)
       })
+  },
+  saveEditAuthorWithAvatar ({ state, commit, dispatch }) {
+    if (state.avatar.file) {
+      Uploader.upload(state.avatar.file)
+        .then(({ path }) => {
+          if (path) {
+            commit(types.UPDATE_EDIT_AUTHOR_AVATAR_NAME, path)
+            commit(types.UPDATE_EDIT_AUTHOR_AVATAR_FILE, null)
+          }
+          dispatch('saveEditAuthor')
+        })
+    } else {
+      dispatch('saveEditAuthor')
+    }
   },
   deleteAuthor ({ state, commit, dispatch }){
     const authorId = state.main.id
@@ -85,6 +108,7 @@ const mutations = {
     state.main.name = author.name
     state.main.age = author.age
     state.main.sex = author.sex
+    state.avatar.url = author.avatar
     state.main.interestIds = author.interestIds
   },
   [types.UPDATE_EDIT_AUTHOR_NAME] (state, value) {
@@ -95,6 +119,15 @@ const mutations = {
   },
   [types.UPDATE_EDIT_AUTHOR_SEX] (state, value) {
     state.main.sex = value
+  },
+  [types.UPDATE_EDIT_AUTHOR_AVATAR_URL] (state, value) {
+    state.avatar.url = value
+  },
+  [types.UPDATE_EDIT_AUTHOR_AVATAR_NAME] (state, value) {
+    state.avatar.name = value
+  },
+  [types.UPDATE_EDIT_AUTHOR_AVATAR_FILE] (state, value) {
+    state.avatar.file = value
   },
   [types.UPDATE_EDIT_AUTHOR_INTERESTS] (state, value) {
     state.main.interestIds = value
@@ -116,6 +149,10 @@ const mutations = {
     state.main.interestIds = []
     state.editForm.visible = false
     state.deleteForm.visible = false
+    state.avatar.name = null
+    state.avatar.url = null
+    state.avatar.file = null
+    state.avatar.errors = []
     state.errorText = ''
   }
 }

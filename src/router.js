@@ -20,8 +20,8 @@ export default new Router({
       component: Profile
     },
     {
-      path: '/Interest',
-      name: 'Interest',
+      path: '/interest',
+      name: 'interest',
       component: Interest
     },
     {

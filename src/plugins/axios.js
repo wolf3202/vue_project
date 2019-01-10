@@ -10,7 +10,9 @@ Vue.use(VueAxios, axios)
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
 
 axios.interceptors.request.use(request => {
-  request.data = camelToSnakeCase(request.data)
+  if (request.data && typeof request.data.entries !== 'function') {
+    request.data = camelToSnakeCase(request.data)
+  }
   return request
 }, error => Promise.reject(error))
 

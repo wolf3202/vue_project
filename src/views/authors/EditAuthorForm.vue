@@ -10,6 +10,24 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
+                <v-avatar
+                  color="grey lighten-2"
+                  size="150"
+                  @click="pickFile"
+                  style="margin: 0 auto 20px; display: block;"
+                >
+                  <img :src="avatarUrl" v-if="avatarUrl">
+                  <v-icon dark size="78" v-else>account_circle</v-icon>
+                </v-avatar>
+                <input
+                  type="file"
+                  style="display: none"
+                  ref="image"
+                  accept="image/*"
+                  @change="onFilePicked"
+                >
+              </v-flex>
+              <v-flex xs12>
                 <v-text-field label="Name" required
                               v-model="authorName"
                 ></v-text-field>
@@ -137,6 +155,14 @@ export default {
         this.$store.commit(types.UPDATE_EDIT_AUTHOR_INTERESTS, value)
       }
     },
+    avatarUrl: {
+      get () {
+        return this.$store.state.editAuthor.avatar.url
+      },
+      set (value) {
+        this.$store.commit(types.UPDATE_EDIT_AUTHOR_AVATAR_URL, value)
+      }
+    },
     ...mapGetters({
       articles: 'getAllArticles',
       authors: 'getAllAuthors',
@@ -147,9 +173,32 @@ export default {
 
   },
   methods: {
+    pickFile () {
+      this.$refs.image.click()
+    },
+    onFilePicked (e) {
+      const files = e.target.files
+      if (files[0] !== undefined) {
+        const fileName = files[0].name
+        if (fileName.lastIndexOf('.') <= 0) {
+          return
+        }
+        const fr = new FileReader()
+        fr.readAsDataURL(files[0])
+        fr.addEventListener('load', () => {
+          this.avatarUrl = fr.result
+          this.$store.commit(types.UPDATE_EDIT_AUTHOR_AVATAR_NAME, fileName)
+          this.$store.commit(types.UPDATE_EDIT_AUTHOR_AVATAR_FILE, files[0])
+        })
+      } else {
+        this.avatarUrl = null
+        this.$store.commit(types.UPDATE_EDIT_AUTHOR_AVATAR_NAME, null)
+        this.$store.commit(types.UPDATE_EDIT_AUTHOR_AVATAR_FILE, null)
+      }
+    },
     save() {
       if (this.$refs.editAuthorForm.validate()) {
-        this.$store.dispatch('saveEditAuthor')
+        this.$store.dispatch('saveEditAuthorWithAvatar')
       }
     },
     close() {

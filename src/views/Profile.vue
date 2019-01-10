@@ -2,7 +2,7 @@
   <v-content>
     <v-container>
       <v-layout row wrap align-center>
-        <v-flex xs12 md5 offset-md2>
+        <v-flex xs12 md5 offset-md1 align-self-baseline>
           <v-navigation-drawer permanent right>
             <v-toolbar flat>
               <v-list>
@@ -30,10 +30,8 @@
         <v-flex xs12 md4>
           <div class="text-xs-center" v-if="currentAuthor.id != false">
             <v-avatar size="125px">
-              <img
-                class="img-circle elevation-7 mb-1"
-                src="../assets/icon.jpg"
-              >
+              <img :src="avatarUrl" v-if="avatarUrl">
+              <v-icon dark size="78" v-else>account_circle</v-icon>
             </v-avatar>
             <div class="headline">{{ currentAuthor.name }}</div>
             <v-btn flat small color="primary" @click="openEditForm(currentAuthor.id)">Edit</v-btn>
@@ -78,7 +76,12 @@ export default {
       authors: 'getAllAuthors',
       interest: 'getInterestById',
       currentAuthor: 'getThisState'
-    })
+    }),
+    avatarUrl: {
+      get () {
+        return this.$store.state.editAuthor.avatar.url
+      }
+    }
   },
   created() {
     Promise
